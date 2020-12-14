@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>測試</title>
+</head>
+<script src="./res/js/jquery-3.3.1.js"></script>
+<!-- 访问js -->
+<script type="text/javascript" src="controller/login.js"></script>
+<!-- 引入bootstrap -->
+<link href="./res/css/page.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet"
+	href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<body>
+	<form action="login.php" method="post">
+		<div class="mycenter">
+			<div class="mysign">
+				<div class="col-lg-11 text-center text-info">
+					<h2>请登录</h2>
+				</div>
+				<div class="col-lg-10">
+					<input type="text" class="form-control" id="username"
+						placeholder="请输入账户名" required autofocus />
+				</div>
+				<div class="col-lg-10"></div>
+				<div class="col-lg-10">
+					<input type="password" class="form-control" id="password"
+						placeholder="请输入密码" required autofocus />
+				</div>
+				<div class="col-lg-10"></div>
+				<div class="col-lg-10 mycheckbox checkbox">
+					<input type="checkbox" class="col-lg-1">记住密码</input>
+				</div>
+				<div class="col-lg-10"></div>
+				<div class="col-lg-10">
+					<button type="button" class="btn btn-success col-lg-12" id="login" style="left: 26px">登录</button>
+				</div>
+				<div class="col-lg-10" style="left: 26px">
+					<h6 id= "textnr"></h2>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

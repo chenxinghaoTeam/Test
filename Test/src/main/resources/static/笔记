@@ -1,0 +1,5 @@
+HttpServletResponse
+HttpServletRequest
+Web服务器收到客户端的http请求，会针对每一次请求，分别创建一个用于代表请求的request对象、和代表响应的response对象。
+获取网页提交过来的数据，只需要找request对象就行了。要向网页输出数据，只需要找response对象。
+
