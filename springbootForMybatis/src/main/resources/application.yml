@@ -1,0 +1,20 @@
+server:
+  port: 8081
+  #tomcat: 
+    #compression: on
+spring:
+  application:
+    name: service-springbootForMybatis
+  datasource: 
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521/orcl
+    username: cxh
+    password: 123
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/        #设置与Eureka Server交互的地址查询服务和注册服务都需要依赖这个地址。
+
+mybatis:
+  mapper-locations: classpath:/sun/example/demo/mapper/*.xml
+#  type-aliases-package: com.zcz.dao  #在springboot程序入口类处添加注解@MapperScan("com.zcz.dao")此处可省略，不添加的话这里要写上，每个dao层映射接口也要添加注解@Mapping

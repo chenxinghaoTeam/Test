@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sun.example.demo.dao.UserMapper"> 
+
+
+<!-- 指定 resultType 返回值类型时-->
+
+ <select id = "cxh" resultType="map">
+  select * from Persons t where 1 = 1
+  	
+  <if test="cs != null and cs != ''">
+  	and city = #{cs}
+  </if>
+   
+   <if test="dq != null and dq != ''">
+  	and address = #{dq}
+  </if>
+  
+ </select>
+ 
+ 
+  <select id = "login" resultType="map">
+  select * from Login t where 1 = 1
+  and name = #{username}
+  and password = #{password}
+ </select>
+ 
+ 
+</mapper>
