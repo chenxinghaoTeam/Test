@@ -1,11 +1,17 @@
 @charset "UTF-8";
 
 .aa {
-	    position: relative;
-    left: 37%;
-    margin-top: -2%;
-    color: #548c2f;
-}
+	position: relative;
+	left: 37%;
+	margin-top: -2%;
+	color: #548c2f;
 }
 
+
+.col-md-6{
+	box-shadow: inset 1px -1px 1px #444,inset -1px 1px 1px #444;
+	/* padding-bottom: 20%; */
+	width: 49%;
+    left: 1%;
 }
+

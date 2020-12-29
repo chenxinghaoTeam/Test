@@ -53,7 +53,190 @@ function initPage() {
 	}
 }
 
+
+// echarts图标请求
+function getecharts(){
+	// 柱图
+	getBar();
+	// 饼图
+	getPie();
+	// 折现图
+	getLine();
+	// 环形图
+	getRing();
+}
+
+
+function getBar(){
+	// 基于准备好的dom，初始化echarts实例
+	var myChart = echarts.init(document.getElementById('bar'));
+	// 绘制图表
+	myChart.setOption({
+	    title: {
+	        text: '柱图'
+	    },
+	    tooltip: {},
+	    xAxis: {
+	        data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+	    },
+	    yAxis: {},
+	    series: [{
+	        name: '销量',
+	        type: 'bar',
+	        data: [5, 20, 36, 10, 10, 20]
+	    }]
+	});
+}
+
+
+function getPie(){
+	// 基于准备好的dom，初始化echarts实例
+	var myChart = echarts.init(document.getElementById('pie'));
+	// 绘制图表
+	myChart.setOption({
+		 title: {
+		        text: '饼图'
+		    },
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b} : {c} ({d}%)'
+		    },
+		    legend: {
+		        orient: 'vertical',
+		        left: 'right',
+		        data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+		    },
+		    series: [
+		        {
+		            name: '访问来源',
+		            type: 'pie',
+		            radius: '55%',
+		            center: ['50%', '60%'],
+		            data: [
+		                {value: 335, name: '直接访问'},
+		                {value: 310, name: '邮件营销'},
+		                {value: 234, name: '联盟广告'},
+		                {value: 135, name: '视频广告'},
+		                {value: 1548, name: '搜索引擎'}
+		            ],
+		            emphasis: {
+		                itemStyle: {
+		                    shadowBlur: 10,
+		                    shadowOffsetX: 0,
+		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                }
+		            }
+		        }
+		    ]
+	});
+}
+
+
+function getLine(){
+	// 基于准备好的dom，初始化echarts实例
+	var myChart = echarts.init(document.getElementById('line'));
+	// 绘制图表
+	myChart.setOption({
+		 title: {
+		        text: '折线图'
+		    },
+	    xAxis: {
+	        type: 'category',
+	        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+	    },
+	    yAxis: {
+	        type: 'value'
+	    },
+	    series: [{
+	        data: [820, 932, 901, 934, 1290, 1330, 1320],
+	        type: 'line'
+	    }]
+	});
+}
+
+
+function getRing(){
+	// 基于准备好的dom，初始化echarts实例
+	var myChart = echarts.init(document.getElementById('ring'));
+	// 绘制图表
+	myChart.setOption({
+		 title: {
+		        text: '环形图'
+		    },
+		 tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b}: {c} ({d}%)'
+		    },
+		    legend: {
+		        orient: 'vertical',
+		        left: 'right',
+		        data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+		    },
+		    series: [
+		        {
+		            name: '访问来源',
+		            type: 'pie',
+		            radius: ['50%', '70%'],
+		            avoidLabelOverlap: false,
+		            label: {
+		                show: false,
+		                position: 'center'
+		            },
+		            emphasis: {
+		                label: {
+		                    show: true,
+		                    fontSize: '30',
+		                    fontWeight: 'bold'
+		                }
+		            },
+		            labelLine: {
+		                show: false
+		            },
+		            data: [
+		                {value: 335, name: '直接访问'},
+		                {value: 310, name: '邮件营销'},
+		                {value: 234, name: '联盟广告'},
+		                {value: 135, name: '视频广告'},
+		                {value: 1548, name: '搜索引擎'}
+		            ]
+		        }
+		    ]
+	});
+}
+
+
+//提示框
+function showMessage(message,type,time) {
+    let str = ''
+    switch (type) {
+        case 'success':
+            str = '<div class="success-message" style="width: 300px;height: 40px;text-align: center;background-color:#daf5eb;;color: rgba(59,128,58,0.7);position: fixed;left: 43%;top: 35%;line-height: 40px;border-radius: 5px;z-index: 9999">\n' +
+                '    <span class="mes-text">'+message+'</span></div>'
+            break;
+        case 'error':
+            str = '<div class="error-message" style="width: 300px;height: 40px;text-align: center;background-color: #f5f0e5;color: rgba(238,99,99,0.8);position: fixed;left: 43%;top: 35%;line-height: 40px;border-radius: 5px;;z-index: 9999">\n' +
+                '    <span class="mes-text">'+message+'</span></div>'
+    }
+    $('body').append(str)
+    setTimeout(function () {
+        $('.'+type+'-message').remove()
+    },time)
+}
+
+
+
 function clickBtn() {
+	// 导航树
+	$("ul li").click(function() {
+		if(this.innerText == "echarts展示"){
+			getecharts();
+		}else if(this.innerText == "system"){
+			
+		}else if(this.innerText == "人员信息"){
+			initPage();
+		}
+	})
+	
 	// 注册新增按钮的事件
 	$("#btn_add").click(function() {
 		$('#myModal').modal();
@@ -74,6 +257,7 @@ function clickBtn() {
 				var data = invokeAjax("/controller/add", param);
 				if (data.successful) {
 					initPage();// 查询重新刷新表格
+					showMessage("新增成功!","success","1000")
 					flag = false;
 				}
 			}
@@ -84,7 +268,7 @@ function clickBtn() {
 	$("#btn_delete").click(function() {
 		var rows = $("#tb_departments").bootstrapTable("getSelections");
 		if (rows.length == 0) {
-			alert("请先选择要删除的记录!")
+			showMessage("请选择再删除!",'error',"1000");
 			return;
 		} else {
 			$('#delcfmModel').modal();
@@ -103,6 +287,7 @@ function clickBtn() {
 				var data = invokeAjax("/controller/delete", param);
 				if (data.successful) {
 					initPage();// 查询重新刷新表格
+					showMessage("删除成功!","success","1000")
 				}
 			})
 		}
@@ -112,10 +297,10 @@ function clickBtn() {
 	$("#btn_edit").click(function() {
 		var rows = $("#tb_departments").bootstrapTable("getSelections");
 		if (rows.length == 0) {
-			alert("请先选择要修改的记录!")
+			showMessage("请先选择要修改的记录!",'error',"1000");
 			return;
 		} else if (rows.length > 1) {
-			alert("请选择一条数据修改!")
+			showMessage("请选择一条数据修改!",'error',"1000");
 			return;
 		} else {
 			$('#myModal1').modal();
@@ -139,6 +324,7 @@ function clickBtn() {
 				var data = invokeAjax("/controller/update", param);
 				if (data.successful) {
 					initPage();// 查询重新刷新表格
+					showMessage("修改成功!","success","1000")
 				}
 			})
 		}
@@ -159,7 +345,7 @@ function clickBtn() {
 
 	// 导出
 	$("#btn_dc").click(function() {
-		//批量导出id
+		// 批量导出id
 		var rows = $("#tb_departments").bootstrapTable("getSelections");
 		var queryId = "";
 		for (var i = 0; i < rows.length; i++) {
@@ -172,7 +358,7 @@ function clickBtn() {
 		window.location.href="/ExcelController/downloadAllClassmate?queryId="+queryId+"&name="+name+"&address="+address;
 	})
 	
-	//退出操作
+	// 退出操作
 	$("#tc").click(function() {
 		window.location.href="/controller/goOut";
 	})
