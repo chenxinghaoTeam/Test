@@ -9,6 +9,9 @@ setInterval(function() {
 	var h = date.getHours(); // 获取小时
 	var m = date.getMinutes(); // 获取分钟
 	var s = date.getSeconds(); // 获取秒
+	if(s<10){
+		s="0"+s
+	}
 	$(".aa").text(
 			'当前时间:' + year + '年' + mon + '月' + da + '日' + '星期' + day + ' ' + h
 					+ ':' + m + ':' + s);
@@ -34,7 +37,16 @@ function _getUrlPath() {
 		paras[temp[0]] = decodeURI(temp[1], "utf-8");// 中文乱码使用decodeURI()
 	}
 	if (paras.name) {
-		$("#user").text(paras.name)
+		var date = new Date();
+		var text = "";
+		if(date.getHours()>=0 && date.getHours()<12){
+			text = ",早上好！"
+		}else if(date.getHours()>12 && date.getHours()<17){
+			text = ",中午好！"
+		}else if(date.getHours()>17 && date.getHours()<24){
+			text = ",晚上好！"
+		}
+		$("#user").text("尊敬的"+(paras.name)+text);
 	}
 }
 
@@ -205,7 +217,7 @@ function getRing(){
 }
 
 
-//提示框
+// 提示框
 function showMessage(message,type,time) {
     let str = ''
     switch (type) {

@@ -27,13 +27,20 @@
 <script src="./res/js/echarts.min.js"></script>
 <body>
 	<div>
-		<div>
-			用户名:<a id="user"></a>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion"
+						href="#collapseThree" id="user"> 您好! </a>
+				</h4>
+			</div>
+			<div id="collapseThree" class="panel-collapse collapse">
+				<div class="panel-body">请问你点我干嘛？想看什么？？？</div>
+			</div>
+			<h4 id="tc"
+				style="float: right; margin: -30px 21px 0px 0px; color: blue;cursor: pointer;">退出</h4>
 		</div>
-		<div>
-			<a id="tc"
-				style="float: right; margin: -12px 21px 0px 0px; cursor: pointer;">退出</a>
-		</div>
+
 	</div>
 
 	<ul class="nav nav-tabs" role="tablist" id="myTab">
