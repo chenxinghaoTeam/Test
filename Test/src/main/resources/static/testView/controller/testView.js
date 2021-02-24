@@ -22,7 +22,7 @@ window.onload = function() {
 	var oTable = new TableInit();
 	oTable.Init();
 	// 初始化加载
-	initPage();
+	initPage("");
 	// 点击事件
 	clickBtn();
 }
@@ -51,11 +51,12 @@ function _getUrlPath() {
 }
 
 // 列表数据
-function initPage() {
+function initPage(type) {
 	param = {
 		"name" : "",
 		"firstName" : name,
-		"address" : address
+		"address" : address,
+		"type":type
 	}
 	var data = invokeAjax("/controller/initPage", param);
 	if (data.successful) {
@@ -245,9 +246,15 @@ function clickBtn() {
 		}else if(this.innerText == "system"){
 			
 		}else if(this.innerText == "人员信息"){
-			initPage();
+			initPage("");
 		}
 	})
+	
+	
+	
+	$('#tb_departments').on('click-row.bs.table', function (e,row,$element) {
+		//行点击事件
+	});
 	
 	// 注册新增按钮的事件
 	$("#btn_add").click(function() {
@@ -268,7 +275,7 @@ function clickBtn() {
 				}
 				var data = invokeAjax("/controller/add", param);
 				if (data.successful) {
-					initPage();// 查询重新刷新表格
+					initPage("2");// 查询重新刷新表格
 					showMessage("新增成功!","success","1000")
 					flag = false;
 				}
@@ -298,7 +305,7 @@ function clickBtn() {
 				}
 				var data = invokeAjax("/controller/delete", param);
 				if (data.successful) {
-					initPage();// 查询重新刷新表格
+					initPage("2");// 查询重新刷新表格
 					showMessage("删除成功!","success","1000")
 				}
 			})
@@ -335,7 +342,7 @@ function clickBtn() {
 				}
 				var data = invokeAjax("/controller/update", param);
 				if (data.successful) {
-					initPage();// 查询重新刷新表格
+					initPage("2");// 查询重新刷新表格
 					showMessage("修改成功!","success","1000")
 				}
 			})
@@ -346,7 +353,7 @@ function clickBtn() {
 	$("#btn_query").click(function() {
 		name = $("#txt_search_departmentname").val();
 		address = $("#txt_search_statu").val();
-		initPage();
+		initPage("");
 	})
 
 	// 重置
@@ -355,6 +362,25 @@ function clickBtn() {
 		$("#txt_search_statu").val("");
 	})
 
+	
+	// 删除缓存
+	$("#btn_deletecahe").click(function() {
+		var data = invokeAjax("/controller/deleteCace", param);
+		if (data.successful) {
+			showMessage("缓存删除成功!","success","1000")
+		}
+	})
+	
+	// 更新缓存
+	$("#btn_update").click(function() {
+		var data = invokeAjax("/controller/updateCace", param);
+		if (data.successful) {
+			showMessage("缓存更新成功!","success","1000")
+			initPage("");// 查询重新刷新表格
+		}
+	})
+	
+	
 	// 导出
 	$("#btn_dc").click(function() {
 		// 批量导出id

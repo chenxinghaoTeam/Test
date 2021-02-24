@@ -11,6 +11,8 @@ public interface TestClient {
 	//查询
 	public List<Map<String, Object>> getListData(Map<String, Object> params);
 	
+	//更新查询
+	public List<Map<String, Object>> updateListData();
 	
 	//删除
 	public int deleteData(Map<String, Object> params);

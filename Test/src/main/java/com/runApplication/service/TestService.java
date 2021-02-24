@@ -9,11 +9,15 @@ import java.util.UUID;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.runApplication.client.TestClient;
-
+//启动缓存并指定缓存名称为Persons
+@CacheConfig(cacheNames = "Persons")
 @Service
 public class TestService implements TestClient {
 	public static final Logger Logger = LogManager.getLogger(TestService.class);
@@ -23,7 +27,10 @@ public class TestService implements TestClient {
 	/**
 	 * 查询
 	 */
+	//@Cacheable(如果有数据直接读redis缓存并指定key)
+	@Cacheable(key ="'cxh'") 
 	public List<Map<String, Object>> getListData(Map<String, Object> params) {
+		System.out.println("执行数据库操作");
 		List<Map<String, Object>> result = new ArrayList<>();
 		Map<String, Object> param = new HashMap<>();
 		StringBuffer sql = new StringBuffer();
@@ -66,6 +73,23 @@ public class TestService implements TestClient {
 		return result;
 	}
 
+	
+	//更新后查询(更新指定的缓存key)
+	@CachePut(key ="'cxh'") 
+	public List<Map<String, Object>> updateListData() {
+		System.out.println("更新后查询数据库并存入redis中！！！");
+		List<Map<String, Object>> result = new ArrayList<>();
+		Map<String, Object> param = new HashMap<>();
+		StringBuffer sql = new StringBuffer();
+		sql.append("select * from Persons t ");
+		try {
+			result = jdbcTemplate.queryForList(sql.toString(), param);
+		} catch (Exception e) {
+			Logger.error("查询失败!");
+		}
+		return result;
+	
+	}
 	/**
 	 * 删除操作
 	 */

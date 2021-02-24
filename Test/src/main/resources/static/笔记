@@ -3,3 +3,59 @@ HttpServletRequest
 Web服务器收到客户端的http请求，会针对每一次请求，分别创建一个用于代表请求的request对象、和代表响应的response对象。
 获取网页提交过来的数据，只需要找request对象就行了。要向网页输出数据，只需要找response对象。
 
+/*********************springboot整合redis***********************/
+1、<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<!-- 2.0以上高版本redis的lettuce需要commons-pool2 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+2、redis配置文件
+@Configuration
+public class RedisConfig {
+	@Bean
+	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setConnectionFactory(redisConnectionFactory);
+		// 设置key的序列化器 String
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		// 重写Redis序列化方式，使用Json方式 
+		GenericJackson2JsonRedisSerializer jackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
+		// 设置值（value）的序列化采用FastJsonRedisSerializer。
+		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+		return redisTemplate;
+	}
+}
+3、使用redis方法
+@Autowired
+private RedisTemplate<String, Object> redisTemplate;
+redisTemplate.方法
+4、配置redis
+#redis配置文件 redis默认有db0~db15 每一个代表一个库 database可以指定哪一个
+spring:
+	redis:
+		database: 1
+		host: 127.0.0.1
+		jedis:
+           pool:
+             #最大连接数据库连接数,设 0 为没有限制
+             max-active: 8
+             #最大等待连接中的数量,设 0 为没有限制
+             max-idle: 8
+             #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
+             max-wait: -1ms
+    		 #最小等待连接中的数量,设 0 为没有限制
+             min-idle: 0
+	lettuce:
+  		pool:
+    		max-active: 8
+   			max-idle: 8
+    		max-wait: -1ms
+    		min-idle: 0
+  		shutdown-timeout: 100ms
+	password: ''  
+	port: 6379
