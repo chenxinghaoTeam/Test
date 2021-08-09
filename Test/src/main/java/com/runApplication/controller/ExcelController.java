@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,18 +17,20 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.util.StringUtil;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.runApplication.client.TestClient;
@@ -89,8 +90,8 @@ public class ExcelController {
 		/*********************** 以上为样式 ************************/
 
 		Map<String, Object> map1 = new HashMap<>();
-		map1.put("firstName", request.getParameter("name")==null?"":request.getParameter("name"));
-		map1.put("address", request.getParameter("address")==null?"":request.getParameter("address"));
+		map1.put("firstName", request.getParameter("name") == null ? "" : request.getParameter("name"));
+		map1.put("address", request.getParameter("address") == null ? "" : request.getParameter("address"));
 		map1.put("queryId", request.getParameter("queryId"));
 		List<Map<String, Object>> result = service.getListData(map1);
 
@@ -273,4 +274,72 @@ public class ExcelController {
 		return "success";
 	}
 
+	/**
+	 * Excel导入操作
+	 */
+	@RequestMapping("/InputExcel")
+	public String inputExcel(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws Exception {
+		long startTime = System.currentTimeMillis();
+		String fileName = file.getOriginalFilename();// 获取文件名
+		InputStream is = file.getInputStream();
+		HSSFWorkbook wb = new HSSFWorkbook(is);
+		int okrows = 0;
+		// 得到第一个shell
+		HSSFSheet sheet = wb.getSheetAt(0);
+		// 得到Excel的行数
+		int totalRows = sheet.getPhysicalNumberOfRows();
+		// 得到Excel的列数(前提是有行数)
+		int totalCells = 0;
+		if (totalRows > 1 && sheet.getRow(0) != null) {
+			totalCells = sheet.getRow(0).getPhysicalNumberOfCells();
+		}
+		// 行数
+		String text = "";
+		String ids = "";
+		for (int i = 1; i < totalRows; i++) {
+			Map<String, Object> map = new HashMap<>();
+			;
+			// 第几行
+			Row row = sheet.getRow(i);
+			// 列数
+			for (int j = 0; j < totalCells; j++) {
+				// 每行的列
+				Cell cell = row.getCell(j);
+				if (cell != null) {
+					//只能读取字段为String类型的,其他类型的字段暂不支持。方法自写
+					String value = String.valueOf(cell.getRichStringCellValue());
+					if (j == 0) {
+						map.put("id_p", value);
+					}
+					if (j == 1) {
+						map.put("firstName", value);
+					}
+					if (j == 2) {
+						map.put("lastName", value);
+					}
+					if (j == 3) {
+						map.put("address", value);
+					}
+					if (j == 4) {
+						map.put("city", value);
+					}
+				}
+			}
+			int isok = service.insertExcel(map);
+			if (isok == 0) {
+				ids += "," + map.get("id_p");
+			} else {
+				okrows++;
+			}
+		}
+		long endTime = System.currentTimeMillis();
+		float excTime = (float) (endTime - startTime) / 1000;
+		if ((totalRows - 1) == okrows) {
+			text = "一共" + (totalRows - 1) + "条数据成功导入" + okrows + "条数据,一共消耗:" + excTime + "秒";
+		} else {
+			text = "一共" + (totalRows - 1) + "条数据成功导入" + okrows + "条数据,一共消耗:" + excTime + "秒,其中存在:"
+					+ (totalRows - okrows) + "条数据无法导入！无法导入的id:" + ids;
+		}
+		return text;
+	}
 }

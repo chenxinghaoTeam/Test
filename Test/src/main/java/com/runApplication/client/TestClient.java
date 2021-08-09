@@ -23,4 +23,7 @@ public interface TestClient {
 	
 	//修改
 	public int uodateData(Map<String, Object> params);
+	
+	//Excel导入
+	public int insertExcel(Map<String, Object> params);
 }

@@ -15,8 +15,9 @@ window.onload=function(){
 			$("#textnr").text("用户名或密码错误！！！").css("color","red");
 		}
 	})
-}
-
+	
+	
+	
 
 //ajax 同步调用
 function invokeAjax(pathUrl,param){
@@ -36,4 +37,3 @@ function invokeAjax(pathUrl,param){
      });
 	return dateValue;
 }
-

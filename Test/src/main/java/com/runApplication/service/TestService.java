@@ -1,5 +1,6 @@
 package com.runApplication.service;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ public class TestService implements TestClient {
 	public static final Logger Logger = LogManager.getLogger(TestService.class);
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
+	
+	
+	JdbcTemplate JdbcTemplate;
 
 	/**
 	 * 查询
@@ -152,6 +157,42 @@ public class TestService implements TestClient {
 		return result;
 	}
 
+	
+	/**
+	 * Excel导入
+	 */
+	public int insertExcel(Map<String, Object> params) {
+		Map<String, Object> param = new HashMap<>();
+		int result = 0;
+		StringBuffer sql = new StringBuffer();
+		sql.append("insert into Persons (id_p,lastName,firstName,address,city) ");
+		sql.append("values(:id_ps,:lastNames,:firstNames,:addresss,:citys)");
+		if (!"".equals(String.valueOf(params.get("id_p")))) {
+			param.put("id_ps", params.get("id_p"));
+		}
+		if (!"".equals(String.valueOf(params.get("lastName")))) {
+			param.put("lastNames", params.get("lastName"));
+		}
+		if (!"".equals(String.valueOf(params.get("address")))) {
+			param.put("addresss", params.get("address"));
+		}
+		if (!"".equals(String.valueOf(params.get("firstName")))) {
+			param.put("firstNames", params.get("firstName"));
+		}
+		if (!"".equals(String.valueOf(params.get("city")))) {
+			param.put("citys", params.get("city"));
+		}
+
+		try {
+			result = jdbcTemplate.update(sql.toString(), param);
+		} catch (Exception e) {
+			Logger.error("Excel导入失败!");
+		}
+
+		return result;
+	}
+	
+	
 	/**
 	 * 修改操作
 	 * 
